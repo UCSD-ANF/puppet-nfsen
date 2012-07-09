@@ -1,2 +1,2 @@
-class nfsen {
+class nfsen inherits nfsen::params {
 }

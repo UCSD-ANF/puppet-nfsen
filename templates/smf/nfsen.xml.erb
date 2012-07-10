@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<!--
+Based on Solaris 10's ntp.xml startup file
+-->
+
+<service_bundle type='manifest' name='nfsen'>
+
+  <service
+    name='network/nfsen'
+    type='service'
+    version='1'>
+
+    <create_default_instance enabled='false' />
+
+    <dependency name='paths'
+      grouping='require_all'
+      restart_on='error'
+      type='path'>
+      <service_fmri value='file://localhost/<%= scope.lookupvar('nfsen::params::netflow_basedir') %>/bin/nfprofile' />
+      <service_fmri value='file://localhost/<%= scope.lookupvar('nfsen::params::netflow_basedir') %>/bin/nfsend' />
+      <service_fmri value='file://localhost/<%= scope.lookupvar('nfsen::params::netflow_basedir') %>/bin/nfsen' />
+      <service_fmri value='file://localhost/<%= scope.lookupvar('nfsen::params::netflow_basedir') %>/bin/nfcapd' />
+    </dependency>
+
+    <dependency name='network'
+      grouping='require_any'
+      restart_on='error'
+      type='service'>
+      <service_fmri value='svc:/network/service' />
+    </dependency>
+
+    <dependent
+      name='nfsen_multi-user'
+      grouping='optional_all'
+      restart_on='none'>
+      <service_fmri
+        value='svc:/milestone/multi-user' />
+    </dependent>
+
+    <exec_method
+      type='method'
+      name='start'
+      exec='<%= scope.lookupvar('nfsen::params::netflow_basedir') %>/bin/nfsen start'
+      timeout_seconds='180' />
+
+    <exec_method
+      type='method'
+      name='stop'
+      exec='<%= scope.lookupvar('nfsen::params::netflow_basedir') %>/bin/nfsen stop'
+      timeout_seconds='60' />
+
+    <stability value='Unstable' />
+
+    <template>
+      <common_name>
+        <loctext xml:lang='C'>
+          NfSen Network Flow analyzer
+        </loctext>
+      </common_name>
+      <documentation>
+        <manpage title='nfcapd' section='1' />
+        <manpage title='nfdump' section='1' />
+        <manpage title='nfprofile' section='1' />
+      </documentation>
+    </template>
+  </service>
+
+</service_bundle>

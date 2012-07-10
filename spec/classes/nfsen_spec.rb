@@ -13,6 +13,7 @@ describe 'nfsen' do
 
       it { should create_class('nfsen') }
       it { should create_file('nfsen init').with({
+        'path'    => '/var/svc/manifest/site/nfsen.xml',
         'ensure'  => 'present',
         'owner'   => 'root',
         'group'   => 'root',

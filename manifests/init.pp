@@ -30,6 +30,7 @@ class nfsen inherits nfsen::params {
 
   ### Managed resources
   file { 'nfsen init' :
+    path    => $nfsen::params::init_script,
     ensure  => $manage_file_ensure,
     source  => $manage_init_file_source,
     content => $manage_init_file_content,
